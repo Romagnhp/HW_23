@@ -25,3 +25,72 @@ for j in range (1,5):
     cards1 = [f"{i} {suits}"for i in range(2,11)]
     deck.extend(cards1)
     deck.extend([f'K {suits}', f'Q {suits}', f'J {suits}', f'A {suits}'])
+
+
+# линейный поиск для поиска тузов в раздачи МОЖНО использовать метод строк find() 
+def linearSearch(_list,key):
+    for i in range(len(_list)):
+        if _list[i] == key:
+            return i
+    return -1    
+
+# функция выдачи карт с колоды
+def getCards(deck, n):
+    listPlayerDealer = []
+    for i in range(0,n):
+        listPlayerDealer.append(deck.pop())
+    return listPlayerDealer
+
+# функц обаработки карты (отделяет номинала от масти) 
+def getNumber(CardWithoutSuit):
+    i = CardWithoutSuit.find(' ')
+    return CardWithoutSuit[:i:] #возвращает все что находится до пробела чтобы отделлить масть от номинала
+
+
+# функция опредиление суммы очков ИГРОКА
+def sumCards(listPlayer):
+
+    newList = [] # список розданных карт без МАСТИ
+    for j in listPlayer:
+        el1 = getNumber(j) 
+        newList.append(el1)
+    temp  = linearSearch(newList,'A') # поиск ТУЗА
+    if not temp == -1:
+        ase = newList.pop(temp)
+        newList.append(ase) # если туз найден он переставляется в конец списка
+
+    sum = 0
+    for el in newList: 
+        if el == 'K' or el == 'Q' or el == 'J':
+            el = 10
+        elif el == 'A':
+            if sum + 11 <= 21 and newList.count('A') < 2:
+                el = 11
+            else:
+                el = 1
+        sum += int(el)
+    return sum
+
+# функция опредиление суммы очков ДИЛЛЕРА (отличается уловием для ТУЗА: - А=11 если сумма очков больше 21 во всех остальных случаях А=1 - ТО ЕСТЬ КАРТЫ ДИЛЛЕРА ИЗМ. В ПОЛЬЗУ ИГРОКА)
+def sumCardsDealer(listPlayer):
+
+    newList = [] # список розданных карт без МАСТИ
+    for j in listPlayer:
+        el1 = getNumber(j) 
+        newList.append(el1)
+    temp  = linearSearch(newList,'A') # поиск ТУЗА
+    if not temp == -1:
+        ase = newList.pop(temp)
+        newList.append(ase) # если туз найден он переставляется в конец списка
+
+    sum = 0
+    for el in newList: 
+        if el == 'K' or el == 'Q' or el == 'J':
+            el = 10
+        elif el == 'A':
+            if sum + 11 > 21:
+                el = 11
+            else:
+                el = 1
+        sum += int(el)
+    return sum
