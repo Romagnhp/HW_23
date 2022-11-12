@@ -94,3 +94,55 @@ def sumCardsDealer(listPlayer):
                 el = 1
         sum += int(el)
     return sum
+
+arr1 = [] # карты игрока
+arr2 = [] # карты диллера
+
+# Перетасовка колоды
+shuffle(deck)
+
+print("ИГРА НАЧАЛАСЬ")
+
+# ПЕРВАЯ выдача карт игроку
+arr1 = getCards(deck,2)
+print(f"Выдача игроку {arr1}")
+
+# вывод суммы очков ИГРОКА
+print(sumCards(arr1))
+
+if sumCards(arr1) == 21:
+    print("Вы выиграли")
+else:
+    m = int(input("взять карту (ЕЩЕ) введите - 1 отмена (ХВАТИТ) введите - 0 = "))
+    # следующая выдача карт ИГРОКУ
+    while m == 1:
+    
+        arr1.extend(getCards(deck,1))
+        print(f"Выдача игроку {arr1}")
+        print(sumCards(arr1)) 
+
+        if sumCards(arr1) > 21:
+            print("Вы проиграли")
+            break
+        elif sumCards(arr1) == 21:
+            print("Вы выиграли")
+            break
+        m = int(input("взять карту (ЕЩЕ) введите - 1 отмена (ХВАТИТ) введите - 0 = "))
+    
+# выдача карт ДИЛЛЕРУ    
+while sumCards(arr1) < 21:
+
+    arr2.extend(getCards(deck,1))
+
+    print(f"Выдача диллеру {arr2}")
+    print(sumCardsDealer(arr2))
+
+    if sumCardsDealer(arr2) > sumCards(arr1) and sumCardsDealer(arr2) <= 21:
+        print("Диллер выиграл")
+        break
+    elif sumCardsDealer(arr2) > 21:
+        print("Диллер проиграл")
+        break
+    elif sumCardsDealer(arr2) == sumCards(arr1): 
+        print("ничья")
+        break
